@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,14 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Orbitron:wght@400;700;900&family=Rubik+Glitch&family=VT323&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Orbitron:wght@400;700;900&family=Rubik+Glitch&family=VT323&display=swap"
+        rel="stylesheet">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body class="loading crt-flicker">
     <!-- Overlays -->
     <div class="noise-overlay"></div>
@@ -52,7 +56,7 @@
         <div id="phase-3" class="final-decryption hidden">
             <div class="shield-container">
                 <svg viewBox="0 0 24 24" class="shield-icon" fill="none" stroke="currentColor" stroke-width="1">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
             </div>
             <h1 class="welcome-text" id="welcome-msg">Welcome to Sarif tachamo's Web</h1>
@@ -63,7 +67,7 @@
     <nav class="cyber-nav">
         <div class="container nav-flex">
             <div class="logo neon-text">
-                <span class="logo-icon">⬢</span> [CYBER_RECON_V4]
+                <span class="logo-icon">⬢</span> [SARIF TACHAMO]
             </div>
             <ul class="nav-links">
                 <li><a href="#hero" class="nav-link active">./ROOT</a></li>
@@ -71,7 +75,6 @@
                 <li><a href="#experience" class="nav-link">./LOGS</a></li>
                 <li><a href="#projects" class="nav-link">./PAYLOADS</a></li>
                 <li><a href="#blog" class="nav-link">./INTEL</a></li>
-                <li><a href="javascript:void(0)" id="admin-trigger" class="nav-link neon-text-cyan">./ADMIN</a></li>
             </ul>
         </div>
     </nav>
@@ -96,8 +99,8 @@
                 </div>
                 <div class="hero-text">
                     <h1 class="decrypting" data-text="SARIF TACHAMO">SARIF TACHAMO</h1>
-                    <p class="neon-text-cyan">> Cybersecurity Expert | Cybersecurity Researcher | AI/ML Enthusiast | Web Developer</p>
-                    <p class="neon-text-cyan" style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
+                    <p class="neon-text-cyan hero-role">> Cybersecurity Expert | Researcher | AI/ML Enthusiast | Web Developer</p>
+                    <p class="neon-text-cyan hero-contact" style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
                         sariftachamo.job@gmail.com | +977-9840531722 | Bhaktapur, Nepal
                     </p>
                 </div>
@@ -108,17 +111,17 @@
         <section id="about" class="reveal-section container">
             <div class="about-grid stagger-in">
                 <div class="glass-card profile-card">
-                    <img src="https://via.placeholder.com/400x400?text=OPERATIVE" alt="Profile" class="profile-img">
+                    <img src="profile.JPG" alt="Profile" class="profile-img">
                 </div>
                 <div class="glass-card bio-card">
                     <h2 class="neon-text">01. OPERATIVE_DOSSIER</h2>
                     <div class="dossier-stats">
-                        <p><span>NAME:</span> Sarif Tachamo</p>
+                        <p><span>NAME:</span> <span id="dossier-name">Sarif Tachamo</span></p>
                         <p><span>ROLE:</span> Cybersecurity Researcher</p>
                         <p><span>SECTOR:</span> Computer Engineering (CyberSEC & AI/ML)</p>
                         <p><span>STATUS:</span> <span class="status-online"></span> ACTIVE</p>
                     </div>
-                    <p class="bio-text">Cybersecurity-focused computer engineering undergraduate with hands-on experience in ethical hacking, penetration testing, cryptography, and secure web/app development. Skilled in designing encrypted platforms, cyber threat simulations, and system automation tools. Adept at combining AI/ML techniques with cybersecurity solutions to enhance threat detection and defense.</p>
+                    <p class="bio-text"></p>
                 </div>
             </div>
         </section>
@@ -126,32 +129,7 @@
         <!-- Technical Skills -->
         <section id="skills" class="reveal-section container">
             <h2 class="section-title neon-text">02. ARSENAL_SPECS</h2>
-            <div class="dashboard-grid">
-                <div class="glass-card">
-                    <h3 class="neon-text-cyan">PROGRAMMING</h3>
-                    <div class="tech-tags">
-                        <span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">TypeScript</span><span class="tag">HTML/CSS</span><span class="tag">SQL</span>
-                    </div>
-                </div>
-                <div class="glass-card">
-                    <h3 class="neon-text-cyan">CYBER_SECURITY</h3>
-                    <div class="tech-tags">
-                        <span class="tag">Kali Linux</span><span class="tag">PenTesting</span><span class="tag">Cryptography</span><span class="tag">Network Traffic Analysis</span><span class="tag">Threat Modeling</span>
-                    </div>
-                </div>
-                <div class="glass-card">
-                    <h3 class="neon-text-cyan">FRAMEWORKS_TOOLS</h3>
-                    <div class="tech-tags">
-                        <span class="tag">Flask</span><span class="tag">Next.js</span><span class="tag">Tkinter</span><span class="tag">PyCryptodome</span><span class="tag">Cloudflare</span><span class="tag">Git</span>
-                    </div>
-                </div>
-                <div class="glass-card">
-                    <h3 class="neon-text-cyan">AI_ML</h3>
-                    <div class="tech-tags">
-                        <span class="tag">LeNet-5</span><span class="tag">Ensemble Models</span><span class="tag">Character Recognition</span>
-                    </div>
-                </div>
-            </div>
+            <div id="skills-grid" class="dashboard-grid"></div>
         </section>
 
         <!-- Mission Logs (Experience) -->
@@ -164,7 +142,7 @@
 
         <!-- Payloads (Projects) -->
         <section id="projects" class="reveal-section container">
-            <h2 class="section-title neon-text">03. PAYLOAD_REPOS</h2>
+            <h2 class="section-title neon-text">04. PAYLOAD_REPOS</h2>
             <div class="filter-controls">
                 <button class="filter-btn active" data-filter="all">ALL_FEEDS</button>
                 <button class="filter-btn" data-filter="offensive">OFFENSIVE</button>
@@ -175,35 +153,10 @@
             </div>
         </section>
 
-        <!-- Intel Feed (Blog / Education) -->
+        <!-- Academic Record (Education) -->
         <section id="blog" class="reveal-section container">
             <h2 class="section-title neon-text">05. ACADEMIC_RECORD</h2>
-            <div id="education-list" class="stagger-in">
-                <div class="experience-card glass-card" style="margin-bottom: 1.5rem;">
-                    <div class="exp-header" style="display:flex; justify-content:space-between;">
-                        <h4 class="neon-text">B.Sc. in Computer Engineering</h4>
-                        <span class="tag">[2021 - 2025]</span>
-                    </div>
-                    <p class="neon-text-cyan">Khwopa Engineering College</p>
-                    <p style="font-size: 0.8rem; opacity: 0.7;">GPA: 3.0/4.0</p>
-                </div>
-                <div class="experience-card glass-card" style="margin-bottom: 1.5rem;">
-                    <div class="exp-header" style="display:flex; justify-content:space-between;">
-                        <h4 class="neon-text">+2 Science</h4>
-                        <span class="tag">[2018 - 2019]</span>
-                    </div>
-                    <p class="neon-text-cyan">Khwopa Secondary School</p>
-                    <p style="font-size: 0.8rem; opacity: 0.7;">GPA: 2.85/4.0</p>
-                </div>
-                <div class="experience-card glass-card" style="margin-bottom: 1.5rem;">
-                    <div class="exp-header" style="display:flex; justify-content:space-between;">
-                        <h4 class="neon-text">SEE</h4>
-                        <span class="tag">[2018]</span>
-                    </div>
-                    <p class="neon-text-cyan">Prabhat Secondary School</p>
-                    <p style="font-size: 0.8rem; opacity: 0.7;">GPA: 3.35/4.0</p>
-                </div>
-            </div>
+            <div id="education-list" class="stagger-in"></div>
         </section>
 
         <!-- Certifications & Achievements -->
@@ -212,12 +165,7 @@
             <div class="dashboard-grid">
                 <div class="glass-card">
                     <h3 class="neon-text-cyan">CERTIFICATIONS</h3>
-                    <ul class="bio-text" style="font-size: 0.85rem; list-style: none; padding: 0;">
-                        <li>> CyberSecurity Workshop — Global IOT Nepal</li>
-                        <li>> Generative AI Fundamentals — Databricks</li>
-                        <li>> AI/ML Workshop — KEC</li>
-                        <li>> CyberSecurity Workshop — Security Pal</li>
-                    </ul>
+                    <ul id="certs-list" class="bio-text" style="font-size:.85rem;list-style:none;padding:0"></ul>
                 </div>
                 <div class="glass-card">
                     <h3 class="neon-text-cyan">ACHIEVEMENTS</h3>
@@ -230,22 +178,24 @@
                 </div>
             </div>
         </section>
-            <div id="blog-grid" class="dashboard-grid stagger-in">
-                <!-- Dynamic Content -->
-            </div>
+
+        <!-- Intel Feed (Blogs) -->
+        <section id="intel" class="reveal-section container">
+            <h2 class="section-title neon-text">07. INTEL_FEED</h2>
+            <div id="blog-grid" class="dashboard-grid stagger-in"></div>
         </section>
 
         <!-- Contact Section -->
         <section id="contact" class="reveal-section container">
-            <h2 class="section-title neon-text">07. CONTACT_ME</h2>
+            <h2 class="section-title neon-text">08. CONTACT_ME</h2>
             <div class="dashboard-grid stagger-in">
                 <div class="glass-card">
                     <h3 class="neon-text-cyan">DIRECT_CONNECTION</h3>
-                    <div class="dossier-stats" style="margin-top: 1rem;">
-                        <p><span>EMAIL:</span> sariftachamo.job@gmail.com</p>
-                        <p><span>PHONE:</span> +977-9840531722</p>
-                        <p><span>LOCATION:</span> Bhaktapur, Nepal</p>
-                        <p><span>SOCIAL:</span> <a href="#" class="neon-text-cyan">LinkedIn</a> | <a href="#" class="neon-text-cyan">GitHub</a></p>
+                    <div class="dossier-stats" style="margin-top:1rem">
+                        <p><span>EMAIL:</span>    <span id="contact-email">sariftachamo.job@gmail.com</span></p>
+                        <p><span>PHONE:</span>    <span id="contact-phone">+977-9840531722</span></p>
+                        <p><span>LOCATION:</span> <span id="contact-location">Bhaktapur, Nepal</span></p>
+                        <p><span>SOCIAL:</span>   <span id="social-links"><a href="#" class="neon-text-cyan">LinkedIn</a> | <a href="#" class="neon-text-cyan">GitHub</a></span></p>
                     </div>
                 </div>
                 <div class="glass-card">
@@ -284,48 +234,27 @@
                 <div id="login-feedback"></div>
             </div>
 
-            <!-- Main Dashboard -->
+            <!-- Main Dashboard (CRUD) -->
             <div id="admin-dashboard" class="hidden">
                 <div class="dashboard-header glass-card">
                     <h1 class="neon-text">> CYBER_CONTROL_CENTER</h1>
                     <button id="logout-btn" class="btn-cyber red">[ TERMINATE_SESSION ]</button>
                 </div>
-                
-                <div class="dashboard-grid admin-main-grid">
-                    <!-- Column 1: Metrics & Logs -->
-                    <div class="admin-column">
-                        <div class="glass-card mb-1">
-                            <h3 class="neon-text-cyan">SYSTEM_METRICS</h3>
-                            <canvas id="admin-metrics-chart"></canvas>
-                        </div>
-                        <div class="glass-card log-terminal-card">
-                            <h3 class="neon-text-cyan">SECURE_EVENT_LOGS</h3>
-                            <div id="admin-live-logs" class="log-stream"></div>
-                        </div>
-                    </div>
-
-                    <!-- Column 2: Management & Status -->
-                    <div class="admin-column">
-                        <div class="glass-card mb-1">
-                            <h3 class="neon-text-cyan">NODE_ARRAY_STATUS</h3>
-                            <div class="node-grid">
-                                <div class="node-item"><span class="node-dot online"></span> CPU: 42%</div>
-                                <div class="node-item"><span class="node-dot online"></span> RAM: 1.2GB</div>
-                                <div class="node-item"><span class="node-dot warning"></span> C2_LINK: LAG</div>
-                                <div class="node-item"><span class="node-dot online"></span> DB_SYNC: OK</div>
-                            </div>
-                        </div>
-                        <div class="glass-card">
-                            <h3 class="neon-text-cyan">PAYLOAD_MANAGEMENT</h3>
-                            <div id="admin-project-list" class="admin-list"></div>
-                            <button class="btn-cyber micro">[ INJECT_NEW_PAYLOAD ]</button>
-                        </div>
-                    </div>
-                </div>
+                <!-- Tab Navigation -->
+                <div class="admin-tab-nav" id="admin-tab-nav"></div>
+                <!-- Tab Content -->
+                <div class="glass-card admin-tab-content" id="admin-tab-content"></div>
             </div>
         </div>
     </main>
 
+    <!-- Floating Admin Button -->
+    <button id="admin-trigger" class="admin-fab" title="ACCESS_CONTROL_GATE">
+        <span class="admin-fab-icon">🔒</span>
+        <span class="admin-fab-label">ADMIN</span>
+    </button>
+
     <script src="script.js"></script>
 </body>
+
 </html>

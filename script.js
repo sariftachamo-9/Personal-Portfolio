@@ -1,612 +1,683 @@
 /**
- * SARIF TACHAMO PORTFOLIO V4.0 - INTERACTIVE ENGINE
- * Pure Vanilla JS Implementation
+ * SARIF TACHAMO PORTFOLIO V4.0 — INTERACTIVE ENGINE + FULL CRUD ADMIN
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Initialize State & Foundations
     initStorage();
     initCanvases();
     initLoadingSequence();
-
-    // 2. Component Initialization (Triggered after loading)
     window.addEventListener('sys-ready', () => {
         initTerminal();
         initAnimations();
         initNavigation();
         initAdminPortal();
-        renderDynamicContent();
-        initExperience();
+        renderAll();
         initContactForm();
     });
 });
 
-/**
- * 3. PERSISTENCE LAYER (localStorage)
- */
-function initStorage() {
-    const defaultProjects = [
-        { id: 1, title: 'Asymmetric Cryptographic Platform', category: 'offensive', desc: 'RSA-2048 + AES-256-GCM messaging with TTL self-destruction.', tech: ['Python', 'Flask', 'PyCryptodome'] },
-        { id: 2, title: 'LSB Steganography Engine', category: 'offensive', desc: 'Hiding payloads in pixels with Zlib compression.', tech: ['Python', 'Pillow', 'Zlib'] },
-        { id: 3, title: 'Neural Nepali Recognizer', category: 'defensive', desc: 'Ran2Dev model for Nepali character recognition (95% acc).', tech: ['AI/ML', 'LeNet-5'] },
-        { id: 4, title: 'DoS Simulator', category: 'offensive', desc: 'Differentiating UDP/DNS amp and TLS/JA3 compute attacks.', tech: ['Python', 'Scapy'] },
-        { id: 5, title: 'Employee Management System', category: 'defensive', desc: 'GPS-validated attendance & automated payroll engine.', tech: ['Flask', 'Supabase', 'PostgreSQL'] }
-    ];
-    if (!localStorage.getItem('projects')) localStorage.setItem('projects', JSON.stringify(defaultProjects));
+/* ═══════════════════════════════════════════════════════════
+   DATABASE LAYER
+═══════════════════════════════════════════════════════════ */
+const DB = {
+    get:    k     => JSON.parse(localStorage.getItem(k) || 'null'),
+    set:    (k,v) => localStorage.setItem(k, JSON.stringify(v)),
+    list:   k     => JSON.parse(localStorage.getItem(k) || '[]'),
+    add:    (k,r) => { const l = DB.list(k); r.id = Date.now(); l.push(r); DB.set(k,l); return r; },
+    update: (k,r) => { DB.set(k, DB.list(k).map(x => x.id===r.id ? r : x)); },
+    remove: (k,id)=> { DB.set(k, DB.list(k).filter(x => x.id!==id)); }
+};
 
-    const defaultBlogs = [
-        { id: 1, title: 'Bypassing EDR with Reflective Injection', date: '2026-03-10', category: 'offensive' },
-        { id: 2, title: 'Zero Trust vs Legacy VPN', date: '2026-03-05', category: 'defensive' }
-    ];
-    if (!localStorage.getItem('blogs')) localStorage.setItem('blogs', JSON.stringify(defaultBlogs));
+/* ═══════════════════════════════════════════════════════════
+   DEFAULT DATA
+═══════════════════════════════════════════════════════════ */
+function initStorage() {
+    if (!DB.get('portfolio_profile')) DB.set('portfolio_profile', {
+        name:'SARIF TACHAMO',
+        role:'Cybersecurity Expert | Researcher | AI/ML Enthusiast | Web Developer',
+        bio:'Cybersecurity-focused computer engineering undergraduate with hands-on experience in ethical hacking, penetration testing, cryptography, and secure web/app development. Skilled in designing encrypted platforms, cyber threat simulations, and system automation tools. Adept at combining AI/ML techniques with cybersecurity solutions to enhance threat detection and defense.',
+        email:'sariftachamo.job@gmail.com', phone:'+977-9840531722',
+        location:'Bhaktapur, Nepal', linkedin:'#', github:'#'
+    });
+
+    if (!DB.list('portfolio_projects').length) DB.set('portfolio_projects', [
+        {id:1,title:'Asymmetric Cryptographic Platform',category:'offensive',desc:'RSA-2048 + AES-256-GCM messaging with TTL self-destruction.',tech:'Python, Flask, PyCryptodome',link:''},
+        {id:2,title:'LSB Steganography Engine',         category:'offensive',desc:'Hiding payloads in pixels with Zlib compression.',                    tech:'Python, Pillow, Zlib',    link:''},
+        {id:3,title:'Neural Nepali Recognizer',          category:'defensive',desc:'Ran2Dev model for Nepali character recognition (95% acc).',            tech:'AI/ML, LeNet-5',          link:''},
+        {id:4,title:'DoS Simulator',                     category:'offensive',desc:'Differentiating UDP/DNS amp and TLS/JA3 compute attacks.',             tech:'Python, Scapy',           link:''},
+        {id:5,title:'Employee Management System',        category:'defensive',desc:'GPS-validated attendance & automated payroll engine.',                 tech:'Flask, Supabase, PostgreSQL',link:''}
+    ]);
+
+    if (!DB.list('portfolio_experience').length) DB.set('portfolio_experience', [
+        {id:1,role:'CYBERSECURITY ENGINEER', org:'INDEPENDENT / INTERN PROJECTS',  date:'2023 - PRESENT',details:'Developed secure architectures, encrypted platforms, and cyber threat simulations.',         metrics:'Haversine GPS-validated attendance\nLSB Steganography Engine w/ Zlib\nDoS Simulation: UDP/DNS & TLS/JA3'},
+        {id:2,role:'PEER TECHNICAL MENTOR',  org:'KHWOPA ENGINEERING COLLEGE',     date:'2023 - 2024',   details:'Guided student projects and conducted security-focused workshops.',                          metrics:'Mentored junior students in PenTesting\nSecure Coding workshops\nTechnical system design guidance'}
+    ]);
+
+    if (!DB.list('portfolio_education').length) DB.set('portfolio_education', [
+        {id:1,degree:'B.Sc. in Computer Engineering',school:'Khwopa Engineering College', date:'2021 - 2025',gpa:'3.0/4.0'},
+        {id:2,degree:'+2 Science',                   school:'Khwopa Secondary School',    date:'2018 - 2019',gpa:'2.85/4.0'},
+        {id:3,degree:'SEE',                           school:'Prabhat Secondary School',   date:'2018',       gpa:'3.35/4.0'}
+    ]);
+
+    if (!DB.list('portfolio_certs').length) DB.set('portfolio_certs', [
+        {id:1,name:'CyberSecurity Workshop',    issuer:'Global IOT Nepal'},
+        {id:2,name:'Generative AI Fundamentals',issuer:'Databricks'},
+        {id:3,name:'AI/ML Workshop',            issuer:'KEC'},
+        {id:4,name:'CyberSecurity Workshop',    issuer:'Security Pal'}
+    ]);
+
+    if (!DB.list('portfolio_skills').length) DB.set('portfolio_skills', [
+        {id:1,category:'PROGRAMMING',      tags:'Python, JavaScript, TypeScript, HTML/CSS, SQL'},
+        {id:2,category:'CYBER_SECURITY',   tags:'Kali Linux, PenTesting, Cryptography, Network Traffic Analysis, Threat Modeling'},
+        {id:3,category:'FRAMEWORKS_TOOLS', tags:'Flask, Next.js, Tkinter, PyCryptodome, Cloudflare, Git'},
+        {id:4,category:'AI_ML',            tags:'LeNet-5, Ensemble Models, Character Recognition'}
+    ]);
+
+    if (!DB.list('portfolio_blogs').length) DB.set('portfolio_blogs', [
+        {id:1,title:'Bypassing EDR with Reflective Injection',date:'2026-03-10',category:'offensive',summary:'Techniques for evading endpoint detection using reflective DLL injection.'},
+        {id:2,title:'Zero Trust vs Legacy VPN',               date:'2026-03-05',category:'defensive',summary:'Comparing modern zero-trust architectures against traditional VPN solutions.'}
+    ]);
 }
 
-/**
- * 4. TACTICAL LOADING SEQUENCE (V4.2 - PRECISION 4-PHASE)
- */
+/* ═══════════════════════════════════════════════════════════
+   PUBLIC PORTFOLIO RENDERERS
+═══════════════════════════════════════════════════════════ */
+function renderAll() {
+    renderProfile(); renderSkills(); renderExperience();
+    renderEducation(); renderCerts(); renderProjects(); renderBlogs();
+}
+
+function renderProfile() {
+    const p = DB.get('portfolio_profile'); if (!p) return;
+    const $ = s => document.querySelector(s);
+    if ($('.decrypting'))   { $('.decrypting').textContent = p.name; $('.decrypting').setAttribute('data-text', p.name); }
+    if ($('.hero-role'))      $('.hero-role').textContent    = '> ' + p.role;
+    if ($('.hero-contact'))   $('.hero-contact').textContent = `${p.email} | ${p.phone} | ${p.location}`;
+    if ($('.bio-text'))       $('.bio-text').textContent     = p.bio;
+    if ($('#dossier-name'))   $('#dossier-name').textContent = p.name;   // querySelector with # works
+    const dname = document.getElementById('dossier-name');
+    if (dname) dname.textContent = p.name;
+    const social = document.getElementById('social-links');
+    if (social) social.innerHTML = `<a href="${p.linkedin}" class="neon-text-cyan">LinkedIn</a> | <a href="${p.github}" class="neon-text-cyan">GitHub</a>`;
+    const emailEl = document.getElementById('contact-email');
+    if (emailEl) emailEl.textContent = p.email;
+    const phoneEl = document.getElementById('contact-phone');
+    if (phoneEl) phoneEl.textContent = p.phone;
+    const locEl = document.getElementById('contact-location');
+    if (locEl) locEl.textContent = p.location;
+}
+
+function renderSkills() {
+    const c = document.getElementById('skills-grid'); if (!c) return;
+    c.innerHTML = DB.list('portfolio_skills').map(s => `
+        <div class="glass-card">
+            <h3 class="neon-text-cyan">${s.category}</h3>
+            <div class="tech-tags">${s.tags.split(',').map(t=>`<span class="tag">${t.trim()}</span>`).join('')}</div>
+        </div>`).join('');
+}
+
+function renderExperience() {
+    const c = document.getElementById('experience-list'); if (!c) return;
+    c.innerHTML = DB.list('portfolio_experience').map(e => `
+        <div class="experience-card glass-card" style="margin-bottom:1.5rem">
+            <div class="exp-header" style="display:flex;justify-content:space-between">
+                <h4 class="neon-text">${e.role}</h4><span class="tag">[${e.date}]</span>
+            </div>
+            <p class="neon-text-cyan">${e.org}</p>
+            <p style="font-size:.85rem;margin-top:.5rem;opacity:.8">${e.details}</p>
+            <div style="margin-top:.8rem;display:flex;flex-direction:column;gap:.3rem">
+                ${(e.metrics||'').split('\n').map(m=>m.trim()?`<span style="font-size:.75rem;opacity:.6">> ${m.trim()}</span>`:'').join('')}
+            </div>
+        </div>`).join('');
+}
+
+function renderEducation() {
+    const c = document.getElementById('education-list'); if (!c) return;
+    c.innerHTML = DB.list('portfolio_education').map(e => `
+        <div class="experience-card glass-card" style="margin-bottom:1.5rem">
+            <div class="exp-header" style="display:flex;justify-content:space-between">
+                <h4 class="neon-text">${e.degree}</h4><span class="tag">[${e.date}]</span>
+            </div>
+            <p class="neon-text-cyan">${e.school}</p>
+            <p style="font-size:.8rem;opacity:.7">GPA: ${e.gpa}</p>
+        </div>`).join('');
+}
+
+function renderCerts() {
+    const c = document.getElementById('certs-list'); if (!c) return;
+    c.innerHTML = DB.list('portfolio_certs').map(cert => `
+        <li>> ${cert.name} — <span style="opacity:.6">${cert.issuer}</span></li>`).join('');
+}
+
+function renderProjects(filter = 'all') {
+    const c = document.getElementById('projects-grid'); if (!c) return;
+    const all = DB.list('portfolio_projects');
+    const items = filter === 'all' ? all : all.filter(p => p.category === filter);
+    c.style.opacity = '0';
+    setTimeout(() => {
+        c.innerHTML = items.length ? items.map(p => `
+            <div class="glass-card stagger-item" data-category="${p.category}">
+                <h3 class="neon-text-cyan">${p.title}</h3>
+                <p>${p.desc}</p>
+                <div class="tech-tags">${p.tech.split(',').map(t=>`<span class="tag">${t.trim()}</span>`).join('')}</div>
+                ${p.link ? `<a href="${p.link}" target="_blank" class="neon-text-cyan" style="font-size:.8rem;display:block;margin-top:.5rem">> VIEW_PAYLOAD</a>` : ''}
+            </div>`).join('') : `<p style="opacity:.5;font-size:.9rem">> NO_PAYLOADS_FOUND_IN_SECTOR</p>`;
+        c.style.opacity = '1'; c.style.transition = 'opacity .3s ease';
+    }, 200);
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.onclick = () => {
+            document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            renderProjects(btn.dataset.filter);
+        };
+    });
+}
+
+function renderBlogs() {
+    const c = document.getElementById('blog-grid'); if (!c) return;
+    c.innerHTML = DB.list('portfolio_blogs').map(b => `
+        <div class="glass-card stagger-item">
+            <h3 class="neon-text-cyan">${b.title}</h3>
+            <p style="font-size:.75rem;opacity:.5;margin-bottom:.5rem">${b.date} · <span class="tag">${b.category}</span></p>
+            <p style="font-size:.85rem;opacity:.8">${b.summary}</p>
+        </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LOADING SEQUENCE (4-PHASE)
+═══════════════════════════════════════════════════════════ */
 function initLoadingSequence() {
     const screen = document.getElementById('loading-screen');
-    const p0 = document.getElementById('phase-0');
-    const p1 = document.getElementById('phase-1');
-    const p2 = document.getElementById('phase-2');
-    const p3 = document.getElementById('phase-3');
-
-    // Hide main canvases during premium iframe loading
-    const mCanvas = document.getElementById('matrix-bg');
-    const nCanvas = document.getElementById('network-bg');
+    const p0=document.getElementById('phase-0'), p1=document.getElementById('phase-1'),
+          p2=document.getElementById('phase-2'), p3=document.getElementById('phase-3');
+    const mCanvas=document.getElementById('matrix-bg'), nCanvas=document.getElementById('network-bg');
     if (mCanvas) mCanvas.classList.add('hidden');
     if (nCanvas) nCanvas.classList.add('hidden');
 
-    // --- Phase 0: Shock Intro (1.8s) ---
     p0.classList.remove('hidden');
     const p0Bar = document.getElementById('phase-0-bar');
     p0Bar.style.width = '0%';
-
-    // Bar Delay: 0.5s, Duration: 1s
-    setTimeout(() => {
-        p0Bar.style.transition = 'width 1s linear';
-        p0Bar.style.width = '100%';
-    }, 500);
-
-    // End Phase 0 at 1.8s
+    setTimeout(() => { p0Bar.style.transition='width 1s linear'; p0Bar.style.width='100%'; }, 500);
     setTimeout(() => {
         p0.classList.add('exit');
-        setTimeout(() => {
-            p0.classList.add('hidden');
-            startPhase1();
-        }, 800); // Wait for exit animation
+        setTimeout(() => { p0.classList.add('hidden'); startPhase1(); }, 800);
     }, 1800);
 
     function startPhase1() {
         p1.classList.remove('hidden');
-        const main = document.getElementById('reveal-main');
-        const sub = document.getElementById('reveal-sub');
-        const final = document.getElementById('reveal-final');
-
-        // Reset states
-        main.style.color = 'var(--neon-green)';
-        sub.style.color = 'var(--neon-green)';
-        final.classList.add('hidden');
-        final.innerHTML = '';
-
-        // Stage 1: "i can you" (100ms stagger)
-        const text1 = "i can you";
-        main.innerHTML = text1.split('').map(c => `<span class="reveal-char">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
-        const chars = main.querySelectorAll('.reveal-char');
-        chars.forEach((char, i) => setTimeout(() => char.classList.add('active'), i * 100));
-
-        const stage1Duration = chars.length * 100 + 800;
-
-        setTimeout(() => {
-            // Stage 2: "and" (60ms typing)
+        const main=document.getElementById('reveal-main'), sub=document.getElementById('reveal-sub'), final=document.getElementById('reveal-final');
+        main.style.color='var(--neon-green)'; sub.style.color='var(--neon-green)';
+        final.classList.add('hidden'); final.innerHTML='';
+        const text1="i can see you";
+        main.innerHTML=text1.split('').map(c=>`<span class="reveal-char">${c===' '?'&nbsp;':c}</span>`).join('');
+        const chars=main.querySelectorAll('.reveal-char');
+        chars.forEach((ch,i)=>setTimeout(()=>ch.classList.add('active'),i*100));
+        const stage1Duration=chars.length*100+800;
+        setTimeout(()=>{
             sub.classList.add('animate-pulse');
-            typeSubtext("and", 60, () => {
-                setTimeout(() => {
-                    // Stage 3: "i will find you anywhere and anyhow," (60ms typing)
-                    typeSubtext("i will find you anywhere and anyhow,", 60, () => {
-                        setTimeout(() => {
-                            // Stage 4: "no matter what you do" (60ms typing)
-                            typeSubtext("no matter what you do", 60, () => {
-                                setTimeout(() => {
-                                    // Stage 5: "and where you hide" (60ms typing)
-                                    typeSubtext("and where you hide", 60, () => {
-                                        setTimeout(() => {
-                                            // Stage 6: "system detected" (Separately below, 50ms)
-                                            sub.classList.remove('animate-pulse');
-                                            final.classList.remove('hidden');
-
-                                            // Intensify Pulse BG
-                                            const pulseBg = document.querySelector('.green-pulse-bg');
-                                            pulseBg.style.animationDuration = '1.5s';
-                                            pulseBg.style.background = 'radial-gradient(circle, rgba(0, 255, 65, 0.2) 0%, rgba(0, 0, 0, 0) 70%)';
-
-                                            typeCustomText(final, "system detected", 50, () => {
-                                                setTimeout(startPhase2, 1500);
-                                            });
-                                        }, 800);
-                                    });
-                                }, 600);
-                            });
-                        }, 600);
-                    });
-                }, 600);
+            typeSubtext("and",60,()=>{
+                setTimeout(()=>{typeSubtext("i will find you anywhere and anyhow,",60,()=>{
+                    setTimeout(()=>{typeSubtext("no matter what you do",60,()=>{
+                        setTimeout(()=>{typeSubtext("and where you hide",60,()=>{
+                            setTimeout(()=>{
+                                sub.classList.remove('animate-pulse');
+                                final.classList.remove('hidden');
+                                const pulseBg=document.querySelector('.green-pulse-bg');
+                                pulseBg.style.animationDuration='1.5s';
+                                pulseBg.style.background='radial-gradient(circle,rgba(0,255,65,0.2) 0%,rgba(0,0,0,0) 70%)';
+                                typeCustomText(final,"system detected",50,()=>{ setTimeout(startPhase2,1500); });
+                            },800);
+                        });},600);
+                    });},600);
+                });},600);
             });
-        }, stage1Duration);
+        },stage1Duration);
     }
 
-    function typeCustomText(el, text, speed, callback) {
-        el.innerHTML = '';
-        let i = 0;
-        const interval = setInterval(() => {
-            el.innerHTML += text[i];
-            i++;
-            if (i >= text.length) {
-                clearInterval(interval);
-                if (callback) callback();
-            }
-        }, speed);
+    function typeCustomText(el,text,speed,cb) {
+        el.innerHTML=''; let i=0;
+        const iv=setInterval(()=>{ el.innerHTML+=text[i]; i++; if(i>=text.length){clearInterval(iv);if(cb)cb();} },speed);
     }
 
     function startPhase2() {
-        p1.classList.add('hidden');
-        p2.classList.remove('hidden');
-
-        const term = document.getElementById('boot-terminal');
-        const bar = document.getElementById('boot-progress');
-        const lines = [
-            'LOAD_SYSTEM_KERNEL',
-            'SYNC_NEURAL_LINK',
-            'ESCALATE_PRIVILEGES',
-            'ESTABLISH_SOCKET'
-        ];
-
-        let lineIdx = 0;
-        function pushLine() {
-            if (lineIdx >= lines.length) return;
-            const line = document.createElement('div');
-            line.className = 'boot-line';
-            line.innerHTML = `<span>> ${lines[lineIdx]}</span><span class="line-status busy">[BUSY]</span>`;
+        p1.classList.add('hidden'); p2.classList.remove('hidden');
+        const term=document.getElementById('boot-terminal'), bar=document.getElementById('boot-progress');
+        const lines=['LOAD_SYSTEM_KERNEL','SYNC_NEURAL_LINK','ESCALATE_PRIVILEGES','ESTABLISH_SOCKET'];
+        let idx=0;
+        function pushLine(){
+            if(idx>=lines.length) return;
+            const line=document.createElement('div'); line.className='boot-line';
+            line.innerHTML=`<span>> ${lines[idx]}</span><span class="line-status busy">[BUSY]</span>`;
             term.appendChild(line);
-
-            const status = line.querySelector('.line-status');
-            setTimeout(() => {
-                status.textContent = '[OK]';
-                status.className = 'line-status ok';
-                lineIdx++;
-                setTimeout(pushLine, 100);
-            }, 400);
+            const status=line.querySelector('.line-status');
+            setTimeout(()=>{ status.textContent='[OK]'; status.className='line-status ok'; idx++; setTimeout(pushLine,100); },400);
         }
         pushLine();
-
-        // Progress Bar (80ms ticks)
-        let prog = 0;
-        const int = setInterval(() => {
-            prog += 2;
-            bar.style.width = prog + '%';
-            if (prog >= 100) {
-                clearInterval(int);
-                setTimeout(startPhase3, 800);
-            }
-        }, 80);
+        let prog=0;
+        const iv=setInterval(()=>{ prog+=2; bar.style.width=prog+'%'; if(prog>=100){clearInterval(iv);setTimeout(startPhase3,800);} },80);
     }
 
     function startPhase3() {
-        p2.classList.add('hidden');
-        p3.classList.remove('hidden');
-
-        const msg = document.getElementById('welcome-msg');
-        animateDecrypt(msg); // Use existing decrypt logic
-
-        // Letter spacing transition (1em -> 0.4em)
-        setTimeout(() => {
-            msg.classList.add('focused');
-            setTimeout(completeLoad, 1500);
-        }, 1500);
+        p2.classList.add('hidden'); p3.classList.remove('hidden');
+        const msg=document.getElementById('welcome-msg');
+        animateDecrypt(msg);
+        setTimeout(()=>{ msg.classList.add('focused'); setTimeout(completeLoad,1500); },1500);
     }
 
-    function typeSubtext(text, speed, callback) {
-        const sub = document.getElementById('reveal-sub');
-        sub.innerHTML = '';
-        let i = 0;
-        const interval = setInterval(() => {
-            sub.innerHTML += text[i];
-            i++;
-            if (i >= text.length) {
-                clearInterval(interval);
-                if (callback) callback();
-            }
-        }, speed);
+    function typeSubtext(text,speed,cb) {
+        const sub=document.getElementById('reveal-sub'); sub.innerHTML=''; let i=0;
+        const iv=setInterval(()=>{ sub.innerHTML+=text[i]; i++; if(i>=text.length){clearInterval(iv);if(cb)cb();} },speed);
     }
 
     function completeLoad() {
-        screen.style.opacity = '0';
-        setTimeout(() => {
-            screen.style.display = 'none';
-            document.body.classList.remove('loading');
-
-            // Re-show main canvases for the portfolio view
-            const mCanvas = document.getElementById('matrix-bg');
-            const nCanvas = document.getElementById('network-bg');
-            if (mCanvas) mCanvas.classList.remove('hidden');
-            if (nCanvas) nCanvas.classList.remove('hidden');
-
+        screen.style.opacity='0';
+        setTimeout(()=>{
+            screen.style.display='none'; document.body.classList.remove('loading');
+            if(mCanvas) mCanvas.classList.remove('hidden');
+            if(nCanvas) nCanvas.classList.remove('hidden');
             window.dispatchEvent(new CustomEvent('sys-ready'));
-        }, 1000);
+        },1000);
     }
 }
 
-/**
- * 5. TERMINAL ENGINE
- */
+/* ═══════════════════════════════════════════════════════════
+   TERMINAL ENGINE
+═══════════════════════════════════════════════════════════ */
 function initTerminal() {
-    const input = document.getElementById('terminal-input');
-    const output = document.getElementById('terminal-output');
-    const body = document.getElementById('terminal-body');
-
+    const input=document.getElementById('terminal-input'), output=document.getElementById('terminal-output'), body=document.getElementById('terminal-body');
     const commands = {
-        help: () => 'AVAILABLE_COMMANDS: help, ls, cat bio, clear, status, admin',
-        ls: () => 'RECON_LOGS  PAYLOADS  INTEL_FEED  CORE_ASSETS',
-        clear: () => { output.innerHTML = ''; return null; },
-        'cat bio': () => 'SUBJECT: SARIF TACHAMO // ROLE: Cybersecurity Researcher // STATUS: ACTIVE // SECTOR: Computer Engineering',
-        status: () => 'SYSTEM_STATUS: NOMINAL // ALL_NODES_ACTIVE // SIGNAL: SECURE',
-        admin: () => {
-            toggleView('admin');
-            return 'REDIRECTING_TO_CONTROL_GATE...';
-        }
+        help:()=>'AVAILABLE_COMMANDS: help, ls, cat bio, clear, status, admin',
+        ls:()=>'RECON_LOGS  PAYLOADS  INTEL_FEED  CORE_ASSETS',
+        clear:()=>{ output.innerHTML=''; return null; },
+        'cat bio':()=>{ const p=DB.get('portfolio_profile'); return p?`SUBJECT: ${p.name} // ROLE: ${p.role} // STATUS: ACTIVE`:'BIO_NOT_FOUND'; },
+        status:()=>'SYSTEM_STATUS: NOMINAL // ALL_NODES_ACTIVE // SIGNAL: SECURE',
+        admin:()=>{ toggleView('admin'); return 'REDIRECTING_TO_CONTROL_GATE...'; }
     };
-
-    input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            const val = input.value.trim().toLowerCase();
-            const response = commands[val] ? commands[val]() : `COMMAND_NOT_FOUND: ${val}`;
-
-            if (val !== 'clear') {
-                const line = document.createElement('p');
-                line.innerHTML = `<span class="prompt">root@sarif:~#</span> ${input.value}`;
-                output.appendChild(line);
-                if (response) {
-                    const res = document.createElement('p');
-                    res.className = 'neon-text-cyan';
-                    res.textContent = response;
-                    output.appendChild(res);
-                }
-            }
-            input.value = '';
-            body.scrollTop = body.scrollHeight;
+    input.addEventListener('keydown',e=>{
+        if(e.key!=='Enter') return;
+        const val=input.value.trim().toLowerCase();
+        const response=commands[val]?commands[val]():`COMMAND_NOT_FOUND: ${val}`;
+        if(val!=='clear'){
+            const line=document.createElement('p');
+            line.innerHTML=`<span class="prompt">root@sarif:~#</span> ${input.value}`;
+            output.appendChild(line);
+            if(response){ const res=document.createElement('p'); res.className='neon-text-cyan'; res.textContent=response; output.appendChild(res); }
         }
+        input.value=''; body.scrollTop=body.scrollHeight;
     });
-
     typeTerminal('> SECURE_SESSION_STARTED\n> TYPE "HELP" TO BEGIN_RECON');
 }
-
 function typeTerminal(text) {
-    const output = document.getElementById('terminal-output');
-    let i = 0;
-    const int = setInterval(() => {
-        output.innerHTML += text[i] === '\n' ? '<br>' : text[i];
-        i++;
-        if (i >= text.length) clearInterval(int);
-    }, 30);
+    const output=document.getElementById('terminal-output'); let i=0;
+    const iv=setInterval(()=>{ output.innerHTML+=text[i]==='\n'?'<br>':text[i]; i++; if(i>=text.length) clearInterval(iv); },30);
 }
 
-/**
- * 6. ANIMATIONS & CANVASES
- */
+/* ═══════════════════════════════════════════════════════════
+   CANVASES
+═══════════════════════════════════════════════════════════ */
 function initCanvases() {
-    const mCanvas = document.getElementById('matrix-bg');
-    const nCanvas = document.getElementById('network-bg');
-
-    // Matrix Logic
-    const mCtx = mCanvas.getContext('2d');
-    const nCtx = nCanvas.getContext('2d');
-
-    function resize() {
-        mCanvas.width = nCanvas.width = window.innerWidth;
-        mCanvas.height = nCanvas.height = window.innerHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    // Matrix Rain
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    const fontSize = 24;
-    const columns = Math.floor(mCanvas.width / fontSize);
-    const drops = Array(columns).fill(1).map(() => Math.floor(Math.random() * -100));
-    const speeds = Array(columns).fill(1).map(() => Math.random() * 0.5 + 0.5);
-
-    function drawMatrix() {
-        mCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-        mCtx.fillRect(0, 0, mCanvas.width, mCanvas.height);
-        
-        mCtx.font = fontSize + 'px monospace';
-        for (let i = 0; i < drops.length; i++) {
-            const text = alphabet[Math.floor(Math.random() * alphabet.length)];
-            const x = i * fontSize;
-            const y = drops[i] * fontSize;
-
-            // Draw character with premium effects
-            if (Math.random() > 0.98) {
-                // Head of the drop (soft glow)
-                mCtx.shadowBlur = 4;
-                mCtx.shadowColor = 'rgba(255, 255, 255, 0.1)';
-                mCtx.fillStyle = 'rgba(192, 224, 192, 0.5)';
-            } else {
-                // Normal characters (no glow, very dim)
-                mCtx.shadowBlur = 0;
-                mCtx.fillStyle = 'rgba(0, 92, 12, 0.3)';
-            }
-
-            mCtx.fillText(text, x, y);
-            
-            if (y > mCanvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i] += speeds[i];
+    const mCanvas=document.getElementById('matrix-bg'), nCanvas=document.getElementById('network-bg');
+    const mCtx=mCanvas.getContext('2d'), nCtx=nCanvas.getContext('2d');
+    function resize(){ mCanvas.width=nCanvas.width=window.innerWidth; mCanvas.height=nCanvas.height=window.innerHeight; }
+    resize(); window.addEventListener('resize',resize);
+    const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', fontSize=24;
+    const columns=Math.floor(mCanvas.width/fontSize);
+    const drops=Array(columns).fill(1).map(()=>Math.floor(Math.random()*-100));
+    const speeds=Array(columns).fill(1).map(()=>Math.random()*.5+.5);
+    function drawMatrix(){
+        mCtx.fillStyle='rgba(0,0,0,0.05)'; mCtx.fillRect(0,0,mCanvas.width,mCanvas.height);
+        mCtx.font=fontSize+'px monospace';
+        for(let i=0;i<drops.length;i++){
+            const text=alphabet[Math.floor(Math.random()*alphabet.length)];
+            const x=i*fontSize, y=drops[i]*fontSize;
+            if(Math.random()>.98){ mCtx.shadowBlur=4; mCtx.shadowColor='rgba(255,255,255,.1)'; mCtx.fillStyle='rgba(192,224,192,.5)'; }
+            else { mCtx.shadowBlur=0; mCtx.fillStyle='rgba(0,92,12,.3)'; }
+            mCtx.fillText(text,x,y);
+            if(y>mCanvas.height&&Math.random()>.975) drops[i]=0;
+            drops[i]+=speeds[i];
         }
-        mCtx.shadowBlur = 0; // Clear for performance
+        mCtx.shadowBlur=0;
     }
-
-    // Network Logic
-    const particles = Array(60).fill().map(() => ({
-        x: Math.random() * nCanvas.width,
-        y: Math.random() * nCanvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5
-    }));
-
-    function drawNetwork() {
-        nCtx.clearRect(0, 0, nCanvas.width, nCanvas.height);
-        nCtx.strokeStyle = 'rgba(0, 229, 255, 0.1)';
-        particles.forEach((p, i) => {
-            p.x += p.vx; p.y += p.vy;
-            if (p.x < 0 || p.x > nCanvas.width) p.vx *= -1;
-            if (p.y < 0 || p.y > nCanvas.height) p.vy *= -1;
-            for (let j = i + 1; j < particles.length; j++) {
-                const p2 = particles[j];
-                const d = Math.hypot(p.x - p2.x, p.y - p2.y);
-                if (d < 150) {
-                    nCtx.beginPath(); nCtx.moveTo(p.x, p.y); nCtx.lineTo(p2.x, p2.y); nCtx.stroke();
-                }
+    const particles=Array(60).fill().map(()=>({x:Math.random()*nCanvas.width,y:Math.random()*nCanvas.height,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5}));
+    function drawNetwork(){
+        nCtx.clearRect(0,0,nCanvas.width,nCanvas.height); nCtx.strokeStyle='rgba(0,229,255,.1)';
+        particles.forEach((p,i)=>{
+            p.x+=p.vx; p.y+=p.vy;
+            if(p.x<0||p.x>nCanvas.width) p.vx*=-1;
+            if(p.y<0||p.y>nCanvas.height) p.vy*=-1;
+            for(let j=i+1;j<particles.length;j++){
+                const p2=particles[j], d=Math.hypot(p.x-p2.x,p.y-p2.y);
+                if(d<150){ nCtx.beginPath(); nCtx.moveTo(p.x,p.y); nCtx.lineTo(p2.x,p2.y); nCtx.stroke(); }
             }
         });
         requestAnimationFrame(drawNetwork);
     }
-
-    setInterval(drawMatrix, 40);
-    drawNetwork();
+    setInterval(drawMatrix,40); drawNetwork();
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════════════════════ */
 function initAnimations() {
-    // Decrypting Text Logic
-    const decryptElements = document.querySelectorAll('.decrypting');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                animateDecrypt(entry.target);
-            }
-        });
-    }, { threshold: 0.2 });
-
-    decryptElements.forEach(el => observer.observe(el));
-
-    // Stagger Reveals
-    const staggerItems = document.querySelectorAll('.stagger-in');
-    const staggerObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('visible');
-        });
-    }, { threshold: 0.1 });
-    staggerItems.forEach(el => staggerObserver.observe(el));
+    const obs=new IntersectionObserver(entries=>entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('visible');animateDecrypt(e.target);} }),{threshold:.2});
+    document.querySelectorAll('.decrypting').forEach(el=>obs.observe(el));
+    const obs2=new IntersectionObserver(entries=>entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }),{threshold:.1});
+    document.querySelectorAll('.stagger-in').forEach(el=>obs2.observe(el));
 }
-
 function animateDecrypt(el) {
-    const originalText = el.getAttribute('data-text') || el.textContent;
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
-    let iteration = 0;
-    const interval = setInterval(() => {
-        el.textContent = originalText.split('').map((char, index) => {
-            if (index < iteration) return originalText[index];
-            return chars[Math.floor(Math.random() * chars.length)];
-        }).join('');
-        if (iteration >= originalText.length) clearInterval(interval);
-        iteration += 1 / 3;
-    }, 40);
+    const orig=el.getAttribute('data-text')||el.textContent;
+    const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+    let it=0;
+    const iv=setInterval(()=>{
+        el.textContent=orig.split('').map((c,i)=>i<it?orig[i]:chars[Math.floor(Math.random()*chars.length)]).join('');
+        if(it>=orig.length) clearInterval(iv);
+        it+=1/3;
+    },40);
 }
 
-/**
- * 7. ADMIN PORTAL LOGIC
- */
+/* ═══════════════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════════════ */
+function initNavigation() {
+    document.querySelectorAll('.nav-link').forEach(link=>{
+        link.addEventListener('click',e=>{
+            if(e.target.id==='admin-trigger') return;
+            document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+            link.classList.add('active');
+        });
+    });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ADMIN PORTAL — LOGIN
+═══════════════════════════════════════════════════════════ */
 function initAdminPortal() {
-    const loginForm = document.getElementById('admin-login-form');
-    const trigger = document.getElementById('admin-trigger');
-    const logout = document.getElementById('logout-btn');
-
-    trigger.addEventListener('click', () => toggleView('admin'));
-    logout.addEventListener('click', () => toggleView('portfolio'));
-
-    loginForm.addEventListener('submit', (e) => {
+    const trigger=document.getElementById('admin-trigger'), logout=document.getElementById('logout-btn');
+    if(trigger) trigger.addEventListener('click',()=>toggleView('admin'));
+    if(logout)  logout.addEventListener('click', ()=>toggleView('portfolio'));
+    document.getElementById('admin-login-form').addEventListener('submit',e=>{
         e.preventDefault();
-        const pass = document.getElementById('admin-pass').value;
-        const feedback = document.getElementById('login-feedback');
-
-        // Simulated JWT/Security Signal
-        console.log("%c [AUTH_GATE] INITIATING_HANDSHAKE... ", "color: #0FF; border: 1px solid #0FF;");
-
-        if (pass === 'AdmiN@369') {
-            feedback.innerHTML = '<span class="status-online"></span> ACCESS_GRANTED';
-            setTimeout(() => {
+        const pass=document.getElementById('admin-pass').value;
+        const fb=document.getElementById('login-feedback');
+        if(pass==='AdmiN@369'){
+            fb.innerHTML='<span class="status-online"></span> ACCESS_GRANTED';
+            setTimeout(()=>{
                 document.getElementById('admin-login').classList.add('hidden');
                 document.getElementById('admin-dashboard').classList.remove('hidden');
-                loadAdminData();
-                initCharts();
-                startLiveLogs();
-            }, 800);
+                initAdminDashboard();
+            },800);
         } else {
-            feedback.innerHTML = '<span style="color:var(--neon-red)">ACCESS_DENIED_INVALID_KEY</span>';
+            fb.innerHTML='<span style="color:var(--neon-red)">ACCESS_DENIED_INVALID_KEY</span>';
         }
     });
 }
 
-function startLiveLogs() {
-    const logEl = document.getElementById('admin-live-logs');
-    if (!logEl) return;
-    const events = [
-        'AUTHENTICATION_HANDSHAKE_SUCCESSFUL',
-        'NODES_SYNCHRONIZED_BY_C2',
-        'TRAFFIC_FILTERED_BEYOND_THRESHOLD',
-        'UNAUTHORIZED_IP_DETECTED_BLOCKED',
-        'PAYLOAD_HEARTBEAT_NOMINAL',
-        'ENCRYPTION_LAYER_ROTATED'
-    ];
-    setInterval(() => {
-        const line = document.createElement('p');
-        line.style.fontSize = '0.7rem';
-        line.style.opacity = '0.6';
-        line.innerHTML = `<span style="color:var(--neon-green)">[${new Date().toLocaleTimeString()}]</span> > ${events[Math.floor(Math.random() * events.length)]}`;
-        logEl.prepend(line);
-        if (logEl.children.length > 15) logEl.lastChild.remove();
-    }, 2000);
-}
-
-function loadAdminData() {
-    const pList = document.getElementById('admin-project-list');
-    const projects = JSON.parse(localStorage.getItem('projects'));
-    pList.innerHTML = projects.map(p => `
-        <div class="admin-list-item glass-card" style="margin-bottom: 0.5rem; padding: 0.5rem 1rem;">
-            <span>${p.title}</span>
-            <button onclick="deleteProject(${p.id})" class="btn-cyber micro red">[ DELETE ]</button>
-        </div>
-    `).join('');
-}
-
-window.deleteProject = (id) => {
-    let projects = JSON.parse(localStorage.getItem('projects'));
-    projects = projects.filter(p => p.id !== id);
-    localStorage.setItem('projects', JSON.stringify(projects));
-    loadAdminData();
-    renderDynamicContent();
+/* ═══════════════════════════════════════════════════════════
+   ADMIN — SECTION SCHEMAS
+═══════════════════════════════════════════════════════════ */
+const SCHEMAS = {
+    projects:{
+        key:'portfolio_projects', label:'PROJECT',
+        fields:[
+            {k:'title',    l:'Title',                       t:'text'},
+            {k:'category', l:'Category',                    t:'select',options:['offensive','defensive']},
+            {k:'desc',     l:'Description',                 t:'textarea'},
+            {k:'tech',     l:'Technologies (comma-sep)',    t:'text'},
+            {k:'link',     l:'Project Link (optional)',     t:'text'}
+        ],
+        display:r=>`${r.title}`
+    },
+    experience:{
+        key:'portfolio_experience', label:'EXPERIENCE',
+        fields:[
+            {k:'role',    l:'Role/Title',                    t:'text'},
+            {k:'org',     l:'Organization',                  t:'text'},
+            {k:'date',    l:'Date Range',                    t:'text'},
+            {k:'details', l:'Details',                       t:'textarea'},
+            {k:'metrics', l:'Key Metrics (one per line)',    t:'textarea'}
+        ],
+        display:r=>`${r.role} @ ${r.org}`
+    },
+    education:{
+        key:'portfolio_education', label:'EDUCATION',
+        fields:[
+            {k:'degree',l:'Degree / Program', t:'text'},
+            {k:'school',l:'Institution',       t:'text'},
+            {k:'date',  l:'Date / Year',       t:'text'},
+            {k:'gpa',   l:'GPA',               t:'text'}
+        ],
+        display:r=>`${r.degree} — ${r.school}`
+    },
+    certs:{
+        key:'portfolio_certs', label:'CERT',
+        fields:[
+            {k:'name',  l:'Certificate Name', t:'text'},
+            {k:'issuer',l:'Issuer',           t:'text'}
+        ],
+        display:r=>`${r.name} — ${r.issuer}`
+    },
+    skills:{
+        key:'portfolio_skills', label:'SKILL_CATEGORY',
+        fields:[
+            {k:'category',l:'Category Name',         t:'text'},
+            {k:'tags',     l:'Tags (comma-sep)',      t:'text'}
+        ],
+        display:r=>`${r.category}`
+    },
+    blogs:{
+        key:'portfolio_blogs', label:'BLOG_POST',
+        fields:[
+            {k:'title',   l:'Title',            t:'text'},
+            {k:'date',    l:'Date (YYYY-MM-DD)', t:'text'},
+            {k:'category',l:'Category',          t:'select',options:['offensive','defensive','research']},
+            {k:'summary', l:'Summary',           t:'textarea'}
+        ],
+        display:r=>`${r.title}`
+    }
 };
 
-function initExperience() {
-    const list = document.getElementById('experience-list');
-    const experience = [
-        { 
-            role: 'CYBERSECURITY ENGINEER', 
-            org: 'INDEPENDENT / INTERN PROJECTS', 
-            date: '[2023 - PRESENT]', 
-            metrics: [
-                'Enforced GPS-validated attendance (Haversine)',
-                'LSB Steganography Engine w/ Zlib',
-                'DoS Simulation: UDP/DNS & TLS/JA3'
-            ],
-            details: 'Developed secure architectures, encrypted platforms, and cyber threat simulations.'
-        },
-        { 
-            role: 'PEER TECHNICAL MENTOR', 
-            org: 'KHWOPA ENGINEERING COLLEGE', 
-            date: '[2023 - 2024]', 
-            metrics: [
-                'Mentored junior students in PenTesting',
-                'Conducted Secure Coding workshops',
-                'Provided technical system design guidance'
-            ],
-            details: 'Guided student projects and conducted security-focused workshops.'
-        }
-    ];
-    list.innerHTML = experience.map(exp => `
-        <div class="experience-card glass-card" style="margin-bottom: 1.5rem;">
-            <div class="exp-header" style="display:flex; justify-content:space-between;">
-                <h4 class="neon-text">${exp.role}</h4>
-                <span class="tag">${exp.date}</span>
-            </div>
-            <p class="neon-text-cyan">${exp.org}</p>
-            <p style="font-size:0.85rem; margin-top:0.5rem; opacity:0.8;">${exp.details}</p>
-            <div class="exp-metrics" style="margin-top:0.8rem; display:flex; flex-direction:column; gap:0.3rem;">
-                ${exp.metrics.map(m => `<span style="font-size:0.75rem; opacity:0.6;">> ${m}</span>`).join('')}
-            </div>
-        </div>
-    `).join('');
+/* ═══════════════════════════════════════════════════════════
+   ADMIN — DASHBOARD TABS
+═══════════════════════════════════════════════════════════ */
+function initAdminDashboard() {
+    const tabs=['PROFILE','PROJECTS','EXPERIENCE','EDUCATION','CERTS','SKILLS','BLOGS','EXPORT'];
+    const nav=document.getElementById('admin-tab-nav');
+    nav.innerHTML=tabs.map((t,i)=>`<button class="admin-nav-tab${i===0?' active':''}" data-tab="${t.toLowerCase()}">[${t}]</button>`).join('');
+    nav.querySelectorAll('.admin-nav-tab').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            nav.querySelectorAll('.admin-nav-tab').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            renderAdminSection(btn.dataset.tab);
+        });
+    });
+    renderAdminSection('profile');
 }
 
-function initContactForm() {
-    const form = document.getElementById('contact-form');
-    const status = document.getElementById('contact-status');
-    if (!form) return;
-    form.addEventListener('submit', (e) => {
+function renderAdminSection(tab) {
+    const content=document.getElementById('admin-tab-content');
+    if(tab==='profile')  { content.innerHTML=buildProfileForm();  bindProfileForm();  return; }
+    if(tab==='export')   { content.innerHTML=buildExportTab();    bindExportTab();    return; }
+    const schema=SCHEMAS[tab]; if(!schema) return;
+    content.innerHTML=buildCrudTab(schema);
+    bindCrudTab(schema);
+}
+
+/* ─── PROFILE FORM ─── */
+function buildProfileForm() {
+    const p=DB.get('portfolio_profile')||{};
+    const f=(k,l,v,t='text')=>`<div class="input-wrapper"><span class="input-label">[${l}]</span>${t==='textarea'?`<textarea id="pf-${k}" rows="3">${v||''}</textarea>`:`<input type="text" id="pf-${k}" value="${v||''}">`}</div>`;
+    return `<h3 class="neon-text-cyan" style="margin-bottom:1.5rem">> PROFILE_EDITOR</h3>
+    <form class="cyber-form" id="profile-form" style="max-width:600px">
+        ${f('name','Full Name',p.name)} ${f('role','Role / Headline',p.role)}
+        ${f('bio','Bio',p.bio,'textarea')} ${f('email','Email',p.email)}
+        ${f('phone','Phone',p.phone)} ${f('location','Location',p.location)}
+        ${f('linkedin','LinkedIn URL',p.linkedin)} ${f('github','GitHub URL',p.github)}
+        <button type="submit" class="btn-cyber">[ SAVE_PROFILE ]</button>
+    </form>
+    <div id="profile-status" style="margin-top:1rem;font-size:.8rem;color:var(--neon-green)"></div>`;
+}
+function bindProfileForm() {
+    document.getElementById('profile-form').addEventListener('submit',e=>{
         e.preventDefault();
-        status.innerHTML = '<p class="neon-text-cyan">> INITIATING_SECURE_PHASE... [WAIT]</p>';
-        setTimeout(() => {
-            status.innerHTML = '<p class="neon-text">> SIGNAL_ESTABLISHED_OPERATIVE_WILL_RESPOND_SHORTLY</p>';
-            form.reset();
-        }, 1500);
+        const keys=['name','role','bio','email','phone','location','linkedin','github'];
+        const data={}; keys.forEach(k=>data[k]=document.getElementById('pf-'+k).value.trim());
+        DB.set('portfolio_profile',data); renderProfile();
+        const st=document.getElementById('profile-status');
+        st.textContent='> PROFILE_UPDATED_OK';
+        setTimeout(()=>st.textContent='',3000);
     });
 }
 
-function toggleView(view) {
-    const portfolio = document.getElementById('portfolio-view');
-    const admin = document.getElementById('admin-view');
-    const nav = document.querySelector('.cyber-nav');
+/* ─── GENERIC CRUD TAB ─── */
+function buildCrudTab(schema) {
+    const records=DB.list(schema.key);
+    const listHtml=records.length
+        ? records.map(r=>`
+            <div class="admin-record-row">
+                <span class="admin-record-label">> ${schema.display(r)}</span>
+                <div class="admin-record-actions">
+                    <button class="btn-cyber micro edit-btn" data-id="${r.id}">[ EDIT ]</button>
+                    <button class="btn-cyber micro red del-btn"  data-id="${r.id}">[ DEL ]</button>
+                </div>
+            </div>`).join('')
+        : `<p style="opacity:.4;font-size:.8rem">> NO_RECORDS_FOUND</p>`;
+    return `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+            <h3 class="neon-text-cyan">> ${schema.label}_MANAGER</h3>
+            <button class="btn-cyber micro add-btn">[ + ADD_NEW ]</button>
+        </div>
+        <div id="crud-list">${listHtml}</div>
+        <div id="crud-form-area" style="margin-top:2rem;display:none"></div>`;
+}
 
-    if (view === 'admin') {
-        portfolio.classList.add('hidden');
-        admin.classList.remove('hidden');
-        nav.classList.add('hidden');
+function buildCrudForm(schema,rec=null) {
+    const v=k=>rec?(rec[k]!==undefined?rec[k]:''):'';
+    const fields=schema.fields.map(f=>{
+        let inp;
+        if(f.t==='textarea') inp=`<textarea id="cf-${f.k}" rows="3">${v(f.k)}</textarea>`;
+        else if(f.t==='select') inp=`<select id="cf-${f.k}" class="admin-select">${f.options.map(o=>`<option value="${o}"${v(f.k)===o?' selected':''}>${o}</option>`).join('')}</select>`;
+        else inp=`<input type="text" id="cf-${f.k}" value="${v(f.k)}">`;
+        return `<div class="input-wrapper"><span class="input-label">[${f.l}]</span>${inp}</div>`;
+    }).join('');
+    return `<hr style="border-color:var(--glass-border);margin-bottom:1.5rem">
+    <h4 class="neon-text-cyan" style="margin-bottom:1rem">> ${rec?'EDIT':'ADD'}_${schema.label}</h4>
+    <form class="cyber-form" id="crud-form" style="max-width:600px">
+        ${fields}
+        <div style="display:flex;gap:1rem">
+            <button type="submit" class="btn-cyber">[ ${rec?'UPDATE':'CREATE'} ]</button>
+            <button type="button" id="cancel-form-btn" class="btn-cyber" style="border-color:rgba(0,255,65,.2);color:rgba(0,255,65,.3)">[ CANCEL ]</button>
+        </div>
+    </form>
+    <div id="crud-status" style="margin-top:.8rem;font-size:.8rem;color:var(--neon-green)"></div>`;
+}
+
+function bindCrudTab(schema) {
+    const formArea=document.getElementById('crud-form-area');
+    const listEl=document.getElementById('crud-list');
+    const tabKey=schema.key.replace('portfolio_','');
+
+    document.querySelector('.add-btn').addEventListener('click',()=>{
+        formArea.innerHTML=buildCrudForm(schema,null);
+        formArea.style.display='block';
+        bindCrudForm(schema,null,tabKey);
+    });
+
+    listEl.querySelectorAll('.edit-btn').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const rec=DB.list(schema.key).find(r=>r.id===+btn.dataset.id);
+            formArea.innerHTML=buildCrudForm(schema,rec);
+            formArea.style.display='block';
+            bindCrudForm(schema,rec,tabKey);
+        });
+    });
+
+    listEl.querySelectorAll('.del-btn').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            if(!confirm(`Delete this ${schema.label}?`)) return;
+            DB.remove(schema.key,+btn.dataset.id);
+            renderAll();
+            renderAdminSection(tabKey);
+        });
+    });
+}
+
+function bindCrudForm(schema,existing,tabKey) {
+    const formArea=document.getElementById('crud-form-area');
+    document.getElementById('cancel-form-btn').addEventListener('click',()=>{ formArea.style.display='none'; });
+    document.getElementById('crud-form').addEventListener('submit',e=>{
+        e.preventDefault();
+        const data={}; schema.fields.forEach(f=>{ data[f.k]=document.getElementById('cf-'+f.k).value.trim(); });
+        if(existing){ data.id=existing.id; DB.update(schema.key,data); }
+        else { DB.add(schema.key,data); }
+        renderAll();
+        renderAdminSection(tabKey);
+    });
+}
+
+/* ─── EXPORT / IMPORT ─── */
+function buildExportTab() {
+    return `<h3 class="neon-text-cyan" style="margin-bottom:1.5rem">> DATA_EXPORT_IMPORT</h3>
+    <div style="display:flex;flex-direction:column;gap:1.5rem">
+        <div class="glass-card" style="padding:1.5rem">
+            <h4 class="neon-text" style="margin-bottom:.8rem">> EXPORT_ALL_DATA</h4>
+            <p style="font-size:.8rem;opacity:.6;margin-bottom:1rem">Download a complete backup of all portfolio data as JSON.</p>
+            <button class="btn-cyber" id="export-btn">[ DOWNLOAD_BACKUP ]</button>
+        </div>
+        <div class="glass-card" style="padding:1.5rem">
+            <h4 class="neon-text" style="margin-bottom:.8rem">> IMPORT_DATA</h4>
+            <p style="font-size:.8rem;opacity:.6;margin-bottom:1rem">Restore data from a JSON backup file. This overwrites current data.</p>
+            <input type="file" id="import-file" accept=".json" style="color:var(--neon-green);margin-bottom:1rem;display:block;font-family:var(--font-main)">
+            <button class="btn-cyber" id="import-btn">[ LOAD_BACKUP ]</button>
+            <div id="import-status" style="margin-top:.8rem;font-size:.8rem;color:var(--neon-green)"></div>
+        </div>
+    </div>`;
+}
+function bindExportTab() {
+    document.getElementById('export-btn').addEventListener('click',()=>{
+        const keys=['portfolio_profile','portfolio_projects','portfolio_experience','portfolio_education','portfolio_certs','portfolio_skills','portfolio_blogs'];
+        const data={}; keys.forEach(k=>{ data[k]=DB.get(k)||DB.list(k); });
+        const a=document.createElement('a');
+        a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+        a.download='portfolio_backup.json'; a.click();
+    });
+    document.getElementById('import-btn').addEventListener('click',()=>{
+        const file=document.getElementById('import-file').files[0]; if(!file) return;
+        const reader=new FileReader();
+        reader.onload=e=>{
+            try {
+                const data=JSON.parse(e.target.result);
+                Object.keys(data).forEach(k=>DB.set(k,data[k]));
+                renderAll();
+                document.getElementById('import-status').textContent='> IMPORT_SUCCESSFUL — portfolio updated!';
+            } catch { document.getElementById('import-status').textContent='> ERROR: invalid JSON file.'; }
+        };
+        reader.readAsText(file);
+    });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MISC HELPERS
+═══════════════════════════════════════════════════════════ */
+function toggleView(view) {
+    const portfolio=document.getElementById('portfolio-view');
+    const admin=document.getElementById('admin-view');
+    const nav=document.querySelector('.cyber-nav');
+    const fab=document.getElementById('admin-trigger');
+    if(view==='admin'){
+        portfolio.classList.add('hidden'); admin.classList.remove('hidden');
+        nav.classList.add('hidden'); if(fab) fab.classList.add('hidden');
     } else {
-        portfolio.classList.remove('hidden');
-        admin.classList.add('hidden');
-        nav.classList.remove('hidden');
+        portfolio.classList.remove('hidden'); admin.classList.add('hidden');
+        nav.classList.remove('hidden'); if(fab) fab.classList.remove('hidden');
     }
 }
 
-function initCharts() {
-    const ctx = document.getElementById('admin-metrics-chart');
-    if (!ctx) return;
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
-            datasets: [{
-                label: 'THREAT_TRAFFIC',
-                data: [5, 12, 45, 10, 23, 70],
-                borderColor: '#00FF41',
-                backgroundColor: 'rgba(0, 255, 65, 0.1)',
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { labels: { color: '#00FF41' } } },
-            scales: {
-                x: { ticks: { color: '#00FF41' } },
-                y: { ticks: { color: '#00FF41' } }
-            }
-        }
-    });
-}
-
-/**
- * 8. DYNAMIC CONTENT RENDERING
- */
-function renderDynamicContent() {
-    const pContainer = document.getElementById('projects-grid');
-    const projects = JSON.parse(localStorage.getItem('projects'));
-
-    pContainer.innerHTML = projects.map(p => `
-        <div class="glass-card stagger-item">
-            <h3 class="neon-text-cyan">${p.title}</h3>
-            <p>${p.desc}</p>
-            <div class="tech-tags">
-                ${p.tech.map(t => `<span class="tag">${t}</span>`).join('')}
-            </div>
-        </div>
-    `).join('');
-}
-
-function initNavigation() {
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-            if (e.target.id === 'admin-trigger') return;
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-        });
+function initContactForm() {
+    const form=document.getElementById('contact-form'), status=document.getElementById('contact-status');
+    if(!form) return;
+    form.addEventListener('submit',e=>{
+        e.preventDefault();
+        status.innerHTML='<p class="neon-text-cyan">> INITIATING_SECURE_PHASE... [WAIT]</p>';
+        setTimeout(()=>{ status.innerHTML='<p class="neon-text">> SIGNAL_ESTABLISHED_OPERATIVE_WILL_RESPOND_SHORTLY</p>'; form.reset(); },1500);
     });
 }
