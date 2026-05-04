@@ -267,7 +267,7 @@ function initLoadingSequence() {
     function startPhase2() {
         p1.classList.add('hidden'); p2.classList.remove('hidden');
         const term = document.getElementById('boot-terminal'), bar = document.getElementById('boot-progress');
-        const lines = ['INITIALIZE_FIREWALL,BYPASS_AUTH_PROTOCOL,INJECT_PAYLOAD,TRACE_IP_ORIGIN,DEPLOY_BACKDOOR'];
+        const lines = ['INITIALIZE_FIREWALL', 'BYPASS_AUTH_PROTOCOL', 'INJECT_PAYLOAD', 'TRACE_IP_ORIGIN', 'DEPLOY_BACKDOOR'];
         let idx = 0;
         function pushLine() {
             if (idx >= lines.length) return;
