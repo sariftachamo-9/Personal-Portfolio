@@ -7,11 +7,12 @@ let columns = 0;
 let rainDrops = [];
 let speeds = [];
 
-// Characters: Katakana + Alphanumeric
-const katakana = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+// Characters: Katakana + Alphanumeric + Symbols
+const katakana = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const nums = '0123456789';
-const alphabet = katakana + latin + nums;
+const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+const alphabet = katakana + latin + nums + symbols;
 
 function resize() {
     width = canvas.width = window.innerWidth;

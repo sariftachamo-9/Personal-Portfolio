@@ -109,19 +109,64 @@
 
         <!-- About / Profile -->
         <section id="about" class="reveal-section container">
+            <h2 class="section-title neon-text">01. ABOUT_ME</h2>
             <div class="about-grid stagger-in">
                 <div class="glass-card profile-card">
-                    <img src="profile.JPG" alt="Profile" class="profile-img">
-                </div>
-                <div class="glass-card bio-card">
-                    <h2 class="neon-text">01. OPERATIVE_DOSSIER</h2>
-                    <div class="dossier-stats">
-                        <p><span>NAME:</span> <span id="dossier-name">Sarif Tachamo</span></p>
-                        <p><span>ROLE:</span> Cybersecurity Researcher</p>
-                        <p><span>SECTOR:</span> Computer Engineering (CyberSEC & AI/ML)</p>
-                        <p><span>STATUS:</span> <span class="status-online"></span> ACTIVE</p>
+                    <div class="profile-img-wrapper">
+                        <img src="profile.JPG" alt="Profile" class="profile-img">
+                        <div class="biometric-scan">
+                            <div class="scan-line"></div>
+                            <div class="scan-line delay-1"></div>
+                            <div class="scan-line delay-2"></div>
+                        </div>
                     </div>
-                    <p class="bio-text"></p>
+                    <div class="identity-info">
+                        <div class="identity-header">BIOMETRIC_SCAN — OPERATOR_VERIFIED</div>
+                        <div class="identity-details">
+                            <p><span>IDENTITY:</span> SARIF TACHAMO</p>
+                            <p><span>CLEARANCE:</span> ALPHA-7 [TOP_SECRET]</p>
+                            <p><span>STATUS:</span> <span class="status-online">◉ ONLINE | ACTIVE</span></p>
+                            <p><span>THREAT_LVL:</span> <span class="threat-level">██░░░░░░░░ LOW</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card bio-card about-panel">
+                    <div class="about-heading">
+                        <div class="about-title">SARIFTACHAMO</div>
+                        <div class="about-subtitle neon-text-cyan">CYBERSECURITY_EXPERT | CYBERSECURITY_RESEARCHER | AI/ML_ENTHUSIAST | WEB_DEVELOPER</div>
+                    </div>
+                    <div class="about-summary" id="about-summary">
+                        Cybersecurity-focused computer engineering undergraduate with hands-on experience in ethical hacking, penetration testing, cryptography, and secure web/app development. Skilled in designing encrypted platforms, cyber threat simulations, and system automation tools. Adept at combining AI/ML techniques with cybersecurity solutions to enhance threat detection and defense.
+                    </div>
+                    <div class="about-panels">
+                        <div class="glass-card profile-tile">
+                            <h3 class="neon-text-cyan">LANGUAGES</h3>
+                            <ul class="tile-list">
+                                <li>NEPALI (NATIVE)</li>
+                                <li>NEWAR (NATIVE)</li>
+                                <li>ENGLISH (FLUENT)</li>
+                                <li>HINDI (CONVERSATIONAL)</li>
+                            </ul>
+                        </div>
+                        <div class="glass-card profile-tile">
+                            <h3 class="neon-text-cyan">INTERESTS</h3>
+                            <ul class="tile-list">
+                                <li>ETHICAL HACKING</li>
+                                <li>CRYPTOGRAPHY</li>
+                                <li>OPEN-SOURCE</li>
+                                <li>AI/ML_APPS</li>
+                            </ul>
+                        </div>
+                        <div class="glass-card profile-tile">
+                            <h3 class="neon-text-cyan">MAJOR_ACHIEVEMENTS</h3>
+                            <ul class="tile-list">
+                                <li>RESEARCH_PAPER Published AI/ML paper at Kathmandu University (2023)</li>
+                                <li>CYBER_TOOLS Developed 10+ specialized security & crypto tools</li>
+                                <li>PROD_APPS Built 5+ production-ready web and mobile applications</li>
+                                <li>DB_ARCHIT Designed 10+ complex database models for EMS/HMS</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -140,9 +185,50 @@
             </div>
         </section>
 
+        <!-- Threat Monitor -->
+        <section id="threat-monitor" class="reveal-section container">
+            <h2 class="section-title neon-text">04. THREAT_MONITOR</h2>
+            <div class="glass-card threat-monitor-card">
+                <div class="threat-header">
+                    <span class="neon-text-cyan">◉ LIVE — GLOBAL ATTACK VECTORS TARGETING SARIF_SEC INFRASTRUCTURE</span>
+                </div>
+                <div class="threat-content">
+                    <div class="threat-map" id="map-container">
+                        <canvas id="threat-map-canvas"></canvas>
+                        <div class="map-overlay-title">GLOBAL_THREATMAP — REALTIME</div>
+                        <div class="map-status-overlay">
+                            <div class="stat-item">
+                                <span class="stat-label">TARGET</span>
+                                <span class="stat-value neon-text-green">BHAKTAPUR_SEC</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">VECTORS</span>
+                                <span class="stat-value neon-text-red" id="active-vector-count">3 ACTIVE</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="system-status">
+                        <div class="status-item">
+                            <span class="status-label">EVENT_LOG</span>
+                            <span class="status-value" id="event-log">2,847 ATTACKS_BLOCKED</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">3 ACTIVE_THREATS</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">99.97% UPTIME</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">247 FIREWALL_RULES</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Payloads (Projects) -->
         <section id="projects" class="reveal-section container">
-            <h2 class="section-title neon-text">04. PAYLOAD_REPOS</h2>
+            <h2 class="section-title neon-text">05. PAYLOAD_REPOS</h2>
             <div class="filter-controls">
                 <button class="filter-btn active" data-filter="all">ALL_FEEDS</button>
                 <button class="filter-btn" data-filter="offensive">OFFENSIVE</button>
@@ -155,13 +241,13 @@
 
         <!-- Academic Record (Education) -->
         <section id="blog" class="reveal-section container">
-            <h2 class="section-title neon-text">05. ACADEMIC_RECORD</h2>
+            <h2 class="section-title neon-text">06. ACADEMIC_RECORD</h2>
             <div id="education-list" class="stagger-in"></div>
         </section>
 
         <!-- Certifications & Achievements -->
         <section id="certifications" class="reveal-section container">
-            <h2 class="section-title neon-text">06. PROTOCOL_UPGRADES</h2>
+            <h2 class="section-title neon-text">07. PROTOCOL_UPGRADES</h2>
             <div class="dashboard-grid">
                 <div class="glass-card">
                     <h3 class="neon-text-cyan">CERTIFICATIONS</h3>
@@ -170,7 +256,7 @@
                 <div class="glass-card">
                     <h3 class="neon-text-cyan">ACHIEVEMENTS</h3>
                     <ul class="bio-text" style="font-size: 0.85rem; list-style: none; padding: 0;">
-                        <li>> Published AI/ML research paper (Kathmandu University)</li>
+                        <li>> Published AI/ML research paper (Kathmandu University)(NCCI)</li>
                         <li>> Developed 10+ Cybersecurity Tools</li>
                         <li>> Designed 10+ Complex Database Models</li>
                         <li>> Built 5+ Production-Ready Web Apps</li>
@@ -181,13 +267,16 @@
 
         <!-- Intel Feed (Blogs) -->
         <section id="intel" class="reveal-section container">
-            <h2 class="section-title neon-text">07. INTEL_FEED</h2>
+            <h2 class="section-title neon-text">08. INTEL_FEED</h2>
+            <div class="intel-header">
+                <span class="neon-text-cyan">◉ LIVE</span>
+            </div>
             <div id="blog-grid" class="dashboard-grid stagger-in"></div>
         </section>
 
         <!-- Contact Section -->
         <section id="contact" class="reveal-section container">
-            <h2 class="section-title neon-text">08. CONTACT_ME</h2>
+            <h2 class="section-title neon-text">09. CONTACT_ME</h2>
             <div class="dashboard-grid stagger-in">
                 <div class="glass-card">
                     <h3 class="neon-text-cyan">DIRECT_CONNECTION</h3>
