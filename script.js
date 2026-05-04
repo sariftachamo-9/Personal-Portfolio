@@ -238,9 +238,9 @@ function initLoadingSequence() {
                 setTimeout(() => {
                     typeSubtext("I WILL FIND YOU ANYWHERE AND ANYHOW,", 60, () => {
                         setTimeout(() => {
-                            typeSubtext("NO MATTER WHAT YOU DO", 60, () => {
+                            typeSubtext("NO MATTER WHAT YOU DO OR WHERE YOU HIDE,", 60, () => {
                                 setTimeout(() => {
-                                    typeSubtext("AND WHERE YOU HIDE !!!", 60, () => {
+                                    typeSubtext("I WILL CATCH YOU AND DESTROY YOU !!!", 60, () => {
                                         setTimeout(() => {
                                             sub.classList.remove('animate-pulse');
                                             final.classList.remove('hidden');
@@ -267,7 +267,7 @@ function initLoadingSequence() {
     function startPhase2() {
         p1.classList.add('hidden'); p2.classList.remove('hidden');
         const term = document.getElementById('boot-terminal'), bar = document.getElementById('boot-progress');
-        const lines = ['LOAD_SYSTEM_KERNEL', 'SYNC_NEURAL_LINK', 'ESCALATE_PRIVILEGES', 'ESTABLISH_SOCKET'];
+        const lines = ['INITIALIZE_FIREWALL,BYPASS_AUTH_PROTOCOL,INJECT_PAYLOAD,TRACE_IP_ORIGIN,DEPLOY_BACKDOOR'];
         let idx = 0;
         function pushLine() {
             if (idx >= lines.length) return;
@@ -313,7 +313,7 @@ function initLoadingSequence() {
 ═══════════════════════════════════════════════════════════ */
 function initTerminal() {
     const input = document.getElementById('terminal-input'), output = document.getElementById('terminal-output'), body = document.getElementById('terminal-body');
-    
+
     const commands = {
         help: () => 'AVAILABLE_COMMANDS:\nhelp - Show this help menu\nls - List directory contents\ncat [file] - Read file contents\nclear - Clear terminal screen\nstatus - Check system health\nadmin - Access control gate\nwhoami - Current operative info\nuptime - System uptime details\nthreats - Active threat monitor\nprojects - Project summary feed\nnmap - Network recon scan\nvuln-scan - Vulnerability assessment\nneofetch - System overview\nlogs - System event logs',
         ls: () => 'RECON_LOGS  PAYLOADS  INTEL_FEED  CORE_ASSETS  THREAT_MONITOR  id_rsa.pub',
@@ -338,7 +338,7 @@ function initTerminal() {
         <span class="neon-text-cyan">      '|||'      </span> <span class="neon-text">Memory:</span> 1.2GB / 32GB
         `,
         sudo: (args) => {
-            if(!args) return 'usage: sudo [command]';
+            if (!args) return 'usage: sudo [command]';
             return `[sudo] password for root: ********** \nACCESS_GRANTED. EXECUTING: ${args}`;
         }
     };
@@ -347,7 +347,7 @@ function initTerminal() {
         if (e.key !== 'Enter') return;
         const fullVal = input.value.trim();
         const val = fullVal.toLowerCase();
-        
+
         let response;
         if (val.startsWith('sudo ')) {
             response = commands.sudo(fullVal.substring(5));
@@ -390,22 +390,22 @@ function typeTerminalLines(lines, container) {
         const lineEl = document.createElement('div');
         lineEl.className = 'terminal-line-item';
         container.appendChild(lineEl);
-        
+
         // Trigger CSS transition
         setTimeout(() => lineEl.classList.add('active'), 10);
-        
+
         // Decrypt effect
         const text = lines[i];
         const chars = '!@#$%^&*()_+1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         let iterations = 0;
-        
+
         const interval = setInterval(() => {
             lineEl.textContent = text.split('')
                 .map((char, index) => {
                     if (index < iterations) return text[index];
                     return chars[Math.floor(Math.random() * chars.length)];
                 }).join('');
-            
+
             if (iterations >= text.length) {
                 clearInterval(interval);
                 i++;
@@ -837,7 +837,7 @@ function initThreatMonitor() {
             arcHeight: Math.random() * 100 - 50
         });
         const countEl = document.getElementById('active-vector-count');
-        if(countEl) countEl.textContent = `${attacks.length} ACTIVE_VECTORS`;
+        if (countEl) countEl.textContent = `${attacks.length} ACTIVE_VECTORS`;
     }
 
     function drawMap() {
@@ -858,7 +858,7 @@ function initThreatMonitor() {
         ctx.shadowColor = '#00ff41';
         ctx.fillStyle = '#00ff41';
         ctx.beginPath(); ctx.arc(target.x, target.y, 4, 0, Math.PI * 2); ctx.fill();
-        
+
         ctx.shadowBlur = 0;
         ctx.strokeStyle = '#00ff41';
         ctx.lineWidth = 1;
@@ -893,8 +893,8 @@ function initThreatMonitor() {
             ctx.beginPath();
             ctx.moveTo(a.source.x, a.source.y);
             ctx.quadraticCurveTo(
-                a.source.x + dx / 2, 
-                a.source.y + dy / 2 - a.arcHeight * 2, 
+                a.source.x + dx / 2,
+                a.source.y + dy / 2 - a.arcHeight * 2,
                 cx, cy
             );
             ctx.stroke();
@@ -930,7 +930,7 @@ function initThreatMonitor() {
     let count = 2847;
     setInterval(() => {
         count += Math.floor(Math.random() * 3) + 1;
-        if(log) log.textContent = count.toLocaleString() + ' ATTACKS_BLOCKED';
+        if (log) log.textContent = count.toLocaleString() + ' ATTACKS_BLOCKED';
     }, 3000);
 
     let uptime = 99.97;
