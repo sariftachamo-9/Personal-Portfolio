@@ -46,7 +46,9 @@ function initStorage() {
         { id: 2, title: 'LSB Steganography Engine', category: 'offensive', desc: 'Hiding payloads in pixels with Zlib compression.', tech: 'Python, Pillow, Zlib', link: '' },
         { id: 3, title: 'Neural Nepali Recognizer', category: 'defensive', desc: 'Ran2Dev model for Nepali character recognition (95% acc).', tech: 'AI/ML, LeNet-5', link: '' },
         { id: 4, title: 'DoS Simulator', category: 'offensive', desc: 'Differentiating UDP/DNS amp and TLS/JA3 compute attacks.', tech: 'Python, Scapy', link: '' },
-        { id: 5, title: 'Employee Management System', category: 'defensive', desc: 'GPS-validated attendance & automated payroll engine.', tech: 'Flask, Supabase, PostgreSQL', link: '' }
+        { id: 5, title: 'Employee Management System', category: 'defensive', desc: 'GPS-validated attendance & automated payroll engine.', tech: 'Flask, Supabase, PostgreSQL', link: '' },
+        { id: 6, title: 'Vulnerability Scanner Dashboard', category: 'web', desc: 'Interactive web dashboard for monitoring real-time network vulnerabilities.', tech: 'React, Node.js, D3.js', link: '' },
+        { id: 7, title: 'Secure Drop API', category: 'web', desc: 'End-to-end encrypted file sharing web portal for whistleblowers.', tech: 'Next.js, Tailwind, WebCrypto API', link: '' }
     ]);
 
     if (!DB.list('portfolio_experience').length) DB.set('portfolio_experience', [
@@ -536,7 +538,7 @@ const SCHEMAS = {
         key: 'portfolio_projects', label: 'PROJECT',
         fields: [
             { k: 'title', l: 'Title', t: 'text' },
-            { k: 'category', l: 'Category', t: 'select', options: ['offensive', 'defensive'] },
+            { k: 'category', l: 'Category', t: 'select', options: ['offensive', 'defensive', 'web'] },
             { k: 'desc', l: 'Description', t: 'textarea' },
             { k: 'tech', l: 'Technologies (comma-sep)', t: 'text' },
             { k: 'link', l: 'Project Link (optional)', t: 'text' }
