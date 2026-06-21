@@ -38,7 +38,7 @@ function initStorage() {
         role: 'Cybersecurity Expert | Researcher | AI/ML Enthusiast | Web Developer',
         bio: 'Cybersecurity-focused computer engineering undergraduate with hands-on experience in ethical hacking, penetration testing, cryptography, and secure web/app development. Skilled in designing encrypted platforms, cyber threat simulations, and system automation tools. Adept at combining AI/ML techniques with cybersecurity solutions to enhance threat detection and defense.',
         email: 'sariftachamo.job@gmail.com', phone: '+977-9840531722',
-        location: 'Bhaktapur, Nepal', linkedin: '#', github: '#'
+        location: 'Bhaktapur, Nepal', linkedin: 'https://np.linkedin.com/in/sarif-tachamo-06b9b9248', github: 'https://github.com/sariftachamo-9'
     });
 
     if (!DB.list('portfolio_projects').length) DB.set('portfolio_projects', [
