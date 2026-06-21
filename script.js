@@ -229,7 +229,7 @@ function initLoadingSequence() {
         const main = document.getElementById('reveal-main'), sub = document.getElementById('reveal-sub'), final = document.getElementById('reveal-final');
         main.style.color = 'var(--neon-green)'; sub.style.color = 'var(--neon-green)';
         final.classList.add('hidden'); final.innerHTML = '';
-        const text1 = "I CAN SEE YOU!!!";
+        const text1 = "!!!SUPRISE!!!";
         main.innerHTML = text1.split('').map(c => `<span class="reveal-char">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
         const chars = main.querySelectorAll('.reveal-char');
         chars.forEach((ch, i) => setTimeout(() => ch.classList.add('active'), i * 100));
@@ -238,11 +238,11 @@ function initLoadingSequence() {
             sub.classList.add('animate-pulse');
             typeSubtext("AND", 60, () => {
                 setTimeout(() => {
-                    typeSubtext("I WILL FIND YOU ANYWHERE AND ANYHOW,", 60, () => {
+                    typeSubtext("SUPRISE,", 60, () => {
                         setTimeout(() => {
-                            typeSubtext("NO MATTER WHAT YOU DO OR WHERE YOU HIDE,", 60, () => {
+                            typeSubtext("WELCOME TO MY ACCOUNT,", 60, () => {
                                 setTimeout(() => {
-                                    typeSubtext("I WILL CATCH YOU AND DESTROY YOU !!!", 60, () => {
+                                    typeSubtext("YOU ARE IN SARIF TACHAMO PORTFOLIO", 60, () => {
                                         setTimeout(() => {
                                             sub.classList.remove('animate-pulse');
                                             final.classList.remove('hidden');
